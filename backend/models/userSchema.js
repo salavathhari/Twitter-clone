@@ -19,6 +19,22 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    avatar:{
+        type:String,
+        default:null
+    },
+    banner:{
+        type:String,
+        default:null
+    },
+    bio:{
+        type:String,
+        default:""
+    },
+    location:{
+        type:String,
+        default:""
+    },
     followers:{
         type:Array,
         default:[]

@@ -5,7 +5,9 @@ import {Toaster} from "react-hot-toast"
 function App() {
   return (
     <div className="App">
-      <Body/>
+      <div className="container">
+        <Body/>
+      </div>
       <Toaster/>
     </div>
   );

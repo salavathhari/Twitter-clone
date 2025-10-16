@@ -9,14 +9,23 @@ import {persistStore} from "redux-persist";
 
 let persistor = persistStore(store);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-      <App />
-      </PersistGate>
-    </Provider>
-  </React.StrictMode>
-);
+async function prepare() {
+  if (process.env.NODE_ENV === 'development') {
+    const { worker } = await import('./mocks/browser');
+    await worker.start({ onUnhandledRequest: 'bypass' });
+  }
+}
+
+prepare().then(() => {
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+        <App />
+        </PersistGate>
+      </Provider>
+    </React.StrictMode>
+  );
+});
 

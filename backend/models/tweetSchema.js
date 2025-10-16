@@ -9,6 +9,10 @@ const tweetSchema = new mongoose.Schema({
         type:Array,
         default:[]
     },
+    image: {
+        type: String,
+        default: null
+    },
     userId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"

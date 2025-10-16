@@ -4,18 +4,23 @@ import { User } from "../models/userSchema.js";
 export const createTweet = async (req, res) => {
     try {
         const { description, id } = req.body;
-        if (!description || !id) {
+        const file = req.file;
+        if ((!description || description.trim() === '') && !file) {
             return res.status(401).json({
                 message: "Fields are required.",
                 success: false
             });
         };
         const user = await User.findById(id).select("-password");
-        await Tweet.create({
+        const newTweet = {
             description,
-            userId:id,
-            userDetails:user
-        });
+            userId: id,
+            userDetails: user
+        };
+        if (file) {
+            newTweet.image = `/uploads/${file.filename}`;
+        }
+        await Tweet.create(newTweet);
         return res.status(201).json({
             message:"Tweet created successfully.",
             success:true,
@@ -60,19 +65,19 @@ export const likeOrDislike = async (req,res) => {
     }
 };
 export const getAllTweets = async (req,res) => {
-    // loggedInUser ka tweet + following user tweet
+    // Get only the specified user's tweets (for profile view)
     try {
         const id = req.params.id;
-        const loggedInUser = await User.findById(id);
-        const loggedInUserTweets = await Tweet.find({userId:id});
-        const followingUserTweet = await Promise.all(loggedInUser.following.map((otherUsersId)=>{
-            return Tweet.find({userId:otherUsersId});
-        }));
+        const userTweets = await Tweet.find({userId:id}).sort({createdAt: -1});
         return res.status(200).json({
-            tweets:loggedInUserTweets.concat(...followingUserTweet),
+            tweets: userTweets,
         })
     } catch (error) {
         console.log(error);
+        return res.status(500).json({
+            message: "Failed to fetch tweets",
+            success: false
+        });
     }
 }
 export const getFollowingTweets = async (req,res) =>{
