@@ -138,13 +138,3 @@ Suggested workflow:
 ## License
 
 This project does not include a chosen license file. Add a `LICENSE` file to make licensing terms explicit.
-
----
-
-If you'd like, I can:
-
-- Add a sample `.env.example` file in `backend/`.
-- Create a minimal `.github/workflows/ci.yml` for CI.
-- Help push this repo to your GitHub account (I can add remote and run git push commands but you will need to complete authentication locally).
-
-Tell me what you'd like next.
